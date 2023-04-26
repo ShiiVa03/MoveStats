@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MoveStats</string>
+    <string name="Collection">Collection</string>
 </resources>
