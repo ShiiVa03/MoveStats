@@ -22,6 +22,9 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 
 
@@ -36,16 +39,19 @@ class MainActivity : AppCompatActivity() {
         Color.YELLOW,
         Color.MAGENTA
     )
+    private lateinit var auth : FirebaseAuth
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
 
         stats.load(applicationContext)
+        auth = Firebase.auth
 
         updateDate()
 
@@ -179,6 +185,12 @@ class MainActivity : AppCompatActivity() {
         if (id == R.id.overflowMenu) {
             val intent = Intent(this, MainActivityCollection::class.java)
             startActivity(intent)
+            return true
+        } else if(id == R.id.logoutMenu){
+            auth.signOut()
+            val intent = Intent(this, StartupActivity::class.java)
+            startActivity(intent)
+            finish()
             return true
         }
 

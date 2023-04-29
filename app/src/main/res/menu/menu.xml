@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.myapplication.MainActivity">
 
     <item
         android:id="@+id/overflowMenu"
-        android:icon="@drawable/menu"
         android:title="@string/Collection"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/logoutMenu"
+
+        android:title="LogOut"
+        app:showAsAction="always">
 
     </item>
 </menu>
