@@ -11,6 +11,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -31,7 +37,6 @@ import java.time.temporal.ChronoUnit
 
 class Stats {
     val weeklyStats: ArrayList<ArrayList<Int>> = ArrayList()
-
 
 
     companion object {
@@ -94,6 +99,9 @@ class Stats {
         private var accs: MutableList<Triple<Float, Float, Float>> = mutableListOf()
         private var gyros: MutableList<Triple<Float, Float, Float>>  = mutableListOf()
 
+        private lateinit var databaseRefined: DatabaseReference
+        private lateinit var auth: FirebaseAuth
+
 
         @RequiresApi(Build.VERSION_CODES.O)
         private fun updateDate() : Boolean{
@@ -133,6 +141,9 @@ class Stats {
 
             val call = apiService.predict(collected)
             val localTodayDate = todayDate // Bring locally to compare with change
+            databaseRefined = Firebase.database("https://data-575fe-default-rtdb.europe-west1.firebasedatabase.app/").reference
+            auth = Firebase.auth
+
 
             call.enqueue(object : Callback<List<Int>> {
                 override fun onResponse(call: Call<List<Int>>, response: Response<List<Int>>) {
@@ -142,6 +153,11 @@ class Stats {
                         dailyStats.mapIndexed { i, e-> e + TIME_PER_SAMPLE * it.count {it == i} } as ArrayList<Int>
                     }
                     save()
+                    val dailystatmap = dailyStats.mapIndexed {i,e -> activities[i] + " Time" to e}.toMap()
+                    if(auth.currentUser != null){
+                        databaseRefined.child("users").child(auth.currentUser!!.uid).updateChildren(dailystatmap)
+                    }
+
                 }
 
                 override fun onFailure(call: Call<List<Int>>, t: Throwable) {

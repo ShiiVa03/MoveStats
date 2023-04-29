@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
@@ -22,7 +23,12 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.Timer
@@ -51,6 +57,7 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
     private var gyroSensor: Sensor? = null
 
     private lateinit var databaseRefined : DatabaseReference
+    private lateinit var auth : FirebaseAuth
 
     var activity: Int = -1
     var type: Int = -1
@@ -60,7 +67,9 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
     private var gyrosPlot : List<Triple<Float, Float, Float>> = ArrayList()
     private var accsPlot : List<Triple<Float, Float, Float>> = ArrayList()
 
-
+    private lateinit var nameEdit : EditText
+    private lateinit var alturaEdit : EditText
+    private lateinit var pesoEdit : EditText
 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +78,33 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
 
         val spinner: Spinner = findViewById(R.id.spinner)
         val spinner2: Spinner = findViewById(R.id.spinner2)
+
+        databaseRefined = Firebase.database("https://data-575fe-default-rtdb.europe-west1.firebasedatabase.app/").reference
+
+        auth = Firebase.auth
+
+        nameEdit = findViewById(R.id.editTextTextPersonName)
+        alturaEdit = findViewById(R.id.editTextTextPersonName2)
+        pesoEdit = findViewById(R.id.editTextTextPersonName4)
+
+        if(auth.currentUser != null){
+            val uidRef = databaseRefined.child("users").child(auth.currentUser!!.uid)
+            val valueEventListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val user = dataSnapshot.getValue(User::class.java)
+                    nameEdit.setText(user!!.name)
+                    alturaEdit.setText(user.height.toString())
+                    pesoEdit.setText(user.weight.toString())
+
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.d(TAG, databaseError.message)
+                }
+            }
+            uidRef.addListenerForSingleValueEvent(valueEventListener)
+
+        }
 
 
         val list = arrayOf("Andar","Correr","Subir Escada","Descer Escada","Estar quieto")
@@ -86,7 +122,7 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
         sensorManager.registerListener(this, accSensor,SensorManager.SENSOR_DELAY_NORMAL)
         sensorManager.registerListener(this, gyroSensor,SensorManager.SENSOR_DELAY_NORMAL)
 
-        databaseRefined = Firebase.database("https://data-575fe-default-rtdb.europe-west1.firebasedatabase.app/").reference
+
 
 
         spinner.adapter = aa
@@ -97,7 +133,6 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
 
         }
@@ -107,7 +142,6 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
 
         }
@@ -127,14 +161,13 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
             btnstart.visibility = View.GONE
             wakeLock.acquire(10*60*1000L /*10 minutes*/)
 
-            val nameEdit = findViewById<EditText>(R.id.editTextTextPersonName)
             val name = nameEdit.text.toString()
 
             if(TextUtils.isEmpty(name)) {
                 nameEdit.error = "Please Enter Your Name"
                 return@setOnClickListener
             }
-            val alturaEdit = findViewById<EditText>(R.id.editTextTextPersonName2)
+
 
             if(TextUtils.isEmpty(alturaEdit.text.toString())) {
                 alturaEdit.error = "Please Enter your Height"
@@ -142,7 +175,7 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
             }
             val altura = alturaEdit.text.toString().toInt()
 
-            val pesoEdit = findViewById<EditText>(R.id.editTextTextPersonName4)
+
             if(TextUtils.isEmpty(pesoEdit.text.toString())) {
                 pesoEdit.error = "Please Enter your Weight"
                 return@setOnClickListener
@@ -181,7 +214,6 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
                             val intent = Intent(context, GraphDisplayActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
                             val arrya = ArrayList(gyrosPlot)
-                            Log.d("LIST AHHAHAHAHA  ",arrya.toString())
                             intent.putExtra("gyrosPlot", ArrayList(gyrosPlot))
                             intent.putExtra("accsPlot", ArrayList(accsPlot))
                             context.startActivity(intent)
@@ -220,9 +252,7 @@ class CollectionActivity: AppCompatActivity(), SensorEventListener {
     fun sendDataToFirebase(name : String, peso : Float, altura : Int){
         val size = listOf(accs.size, gyros.size).min()
         gyrosPlot = gyros.slice(0 until size)
-        Log.d("LIST HEHEHEHHEHE ",gyrosPlot.toString())
         accsPlot = accs.slice(0 until size)
-        Log.d("LIST HEHEHEHHEHE ",accsPlot.toString())
         for (i in 0 until size) {
             val accsSent =
                 listOf(accs[i].first, accs[i].second, accs[i].third)
