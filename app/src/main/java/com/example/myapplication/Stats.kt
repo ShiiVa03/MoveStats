@@ -43,7 +43,7 @@ class Stats {
         const val API_IP = "https://movestats.onrender.com/"
         const val TIME_PER_SAMPLE = 20
         const val filename = "data.json"
-        val activities = listOf("Walking", "Running", "Up-Stairs", "Down-Stairs", "Idle")
+        val activities = listOf("Walking", "Running", "UpStairs", "DownStairs", "Idle")
 
         fun getJsonDataFromFile(context: Context, filename: String): String {
             return try {
@@ -153,7 +153,7 @@ class Stats {
                         dailyStats.mapIndexed { i, e-> e + TIME_PER_SAMPLE * it.count {it == i} } as ArrayList<Int>
                     }
                     save()
-                    val dailystatmap = dailyStats.mapIndexed {i,e -> activities[i] + " Time" to e}.toMap()
+                    val dailystatmap = dailyStats.mapIndexed {i,e -> activities[i] + "Time" to e}.toMap()
                     if(auth.currentUser != null){
                         databaseRefined.child("users").child(auth.currentUser!!.uid).updateChildren(dailystatmap)
                     }
