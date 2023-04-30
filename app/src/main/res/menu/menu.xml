@@ -17,4 +17,11 @@
         app:showAsAction="always">
 
     </item>
+    <item
+        android:id="@+id/leaderboardMenu"
+
+        android:title="Leaderboard"
+        app:showAsAction="always">
+
+    </item>
 </menu>

@@ -192,6 +192,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
             return true
+        } else if (id == R.id.leaderboardMenu) {
+            val intent = Intent(this, LeaderboardActivity::class.java)
+            startActivity(intent)
+            return true
         }
 
         return super.onOptionsItemSelected(item)
