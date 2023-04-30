@@ -5,10 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewleaderboard1"
+        android:layout_width="284dp"
+        android:layout_height="568dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/card_view_design" />
+
     <TextView
-        android:id="@+id/textviewleaderboard2"
-        android:layout_width="412dp"
-        android:layout_height="150dp"
+        android:id="@+id/textviewleaderboard1"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="48sp"
@@ -18,17 +31,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerviewleaderboard2"
-        android:layout_width="412dp"
-        android:layout_height="527dp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:listitem="@layout/card_view_design" />
 </androidx.constraintlayout.widget.ConstraintLayout>

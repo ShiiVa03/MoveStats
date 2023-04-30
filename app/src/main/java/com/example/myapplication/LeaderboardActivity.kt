@@ -1,12 +1,14 @@
 package com.example.myapplication
 
 import CustomAdapter
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,53 +24,38 @@ import com.google.firebase.ktx.Firebase
 
 class LeaderboardActivity : AppCompatActivity() {
 
-    private lateinit var idle : ArrayList<User>
-    private lateinit var walking : ArrayList<User>
-    private lateinit var running : ArrayList<User>
-    private lateinit var upstairs : ArrayList<User>
-    private lateinit var downstairs : ArrayList<User>
-    private lateinit var databaseRefined : DatabaseReference
+    private val activities = listOf("Walking", "Running", "UpStairs", "DownStairs", "Idle")
+    private val colours = listOf(
+        Color.RED,
+        Color.GREEN,
+        Color.BLUE,
+        Color.YELLOW,
+        Color.MAGENTA
+    )
 
+    @SuppressLint("SetTextI18n")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.leaderboard)
+        setContentView(R.layout.leaderboard_activities)
         supportActionBar?.hide()
 
-        databaseRefined = Firebase.database("https://data-575fe-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        val textView = findViewById<TextView>(R.id.textviewleaderboard1)
+        textView.text = "LEADERBOARDS"
 
-
-        fetchUsers()
+        val data = initData()
+        setupCards(data)
     }
 
-    fun fetchUsers() {
-        val users = databaseRefined.child("users")
-
-        idle = ArrayList()
-        users.orderByChild("IdleTime").get().addOnSuccessListener {
-            for (ds in it.children) {
-                val user = ds.getValue(User::class.java)
-                idle.add(user!!)
-            }
-
-            val data = initData(idle)
-            setupCards(data)
-
-        }.addOnFailureListener{
-            Log.e("firebase", "error getting data", it)
-        }
-    }
-
-    private fun initData(list : ArrayList<User>): ArrayList<ItemsViewModel> {
+    private fun initData(): ArrayList<ItemsViewModel> {
         val data = ArrayList<ItemsViewModel>()
 
-        list.reverse()
-        list.forEachIndexed { i, user ->
+        activities.forEachIndexed() { i, act ->
             data.add(
                 ItemsViewModel(
                     R.drawable.ic_launcher_foreground,
                     0f,
-                    "Rank " + (i+1).toString() + ": " + user.name!! + " >>> " + user.IdleTime + " seg",
-                    Color.WHITE
+                    act,
+                    colours[i]
                 )
             )
         }
@@ -77,8 +64,15 @@ class LeaderboardActivity : AppCompatActivity() {
     }
 
     private fun setupCards(data: ArrayList<ItemsViewModel>) {
-        val recyclerview = findViewById<RecyclerView>(R.id.recyclerleaderboard)
-        val adapterListener = CustomAdapter.OnClickListener {}
+        val recyclerview = findViewById<RecyclerView>(R.id.recyclerviewleaderboard1)
+
+        val adapterListener = CustomAdapter.OnClickListener { item ->
+            val i = Intent(this, LeaderboardActivityIndv::class.java)
+            i.putExtra("Activity", item.text)
+            i.putExtra("Colour", item.colour)
+            this.startActivity(i)
+        }
+
         val adapter = CustomAdapter(data, adapterListener)
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter
