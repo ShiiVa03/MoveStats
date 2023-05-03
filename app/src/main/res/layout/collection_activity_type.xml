@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="What will you"
+        android:text="Where will you have"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="do this time"
+        android:text="your phone this time?"
         android:textColor="#3674ff"
         android:textSize="36sp"
         android:textStyle="bold"
@@ -34,10 +34,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnNext"
+        android:id="@+id/btnNextType"
         android:layout_width="228dp"
         android:layout_height="51dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/border_background"
         android:backgroundTint="#000000"
         android:text="Next"
@@ -45,10 +45,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyCollection" />
+        app:layout_constraintTop_toBottomOf="@+id/recyCollectionType" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyCollection"
+        android:id="@+id/recyCollectionType"
         android:layout_width="377dp"
         android:layout_height="464dp"
         android:layout_marginTop="40dp"

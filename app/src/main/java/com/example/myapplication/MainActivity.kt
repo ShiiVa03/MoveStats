@@ -8,11 +8,14 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -22,14 +25,12 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.android.material.navigation.NavigationView
 import java.time.LocalDateTime
 
 
 @Suppress("NAME_SHADOWING")
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val stats: Stats = Stats()
     private val colours = listOf(
@@ -39,19 +40,32 @@ class MainActivity : AppCompatActivity() {
         Color.YELLOW,
         Color.MAGENTA
     )
-    private lateinit var auth : FirebaseAuth
+
+
+    private lateinit var drawerLayout : DrawerLayout
+    private lateinit var navView: NavigationView
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
 
         stats.load(applicationContext)
-        auth = Firebase.auth
+
+        drawerLayout = findViewById(R.id.drawer_layoutMain)
+        navView= findViewById(R.id.nav_viewMain)
+
+        navView.setNavigationItemSelectedListener(this)
+        val imgbtn : ImageButton = findViewById(R.id.imageButtonMain)
+        imgbtn.setOnClickListener {
+            drawerLayout.openDrawer(navView)
+            return@setOnClickListener
+        }
 
         updateDate()
 
@@ -103,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         return data
     }
 
-    private fun setupCards(data: ArrayList<ItemsViewModel>) {
+    private fun setupCards(data: ArrayList<ItemsViewModel>){
 
         val recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
 
@@ -178,28 +192,40 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here.
-        val id = item.itemId
-
-        if (id == R.id.overflowMenu) {
-            val intent = Intent(this, MainActivityCollection::class.java)
-            startActivity(intent)
-            return true
-        } else if(id == R.id.logoutMenu){
-            auth.signOut()
-            val intent = Intent(this, StartupActivity::class.java)
-            startActivity(intent)
-            finish()
-            return true
-        } else if (id == R.id.leaderboardMenu) {
-            val intent = Intent(this, LeaderboardActivity::class.java)
-            startActivity(intent)
-            return true
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.nav_item1 -> {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_item2 -> {
+                val intent = Intent(this, MainActivityCollection::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_item3 -> {
+                // Handle item 3 click
+                val intent = Intent(this, ChangeInfoActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_item4 -> {
+                // Handle item 3 click
+                val intent = Intent(this, LeaderboardActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            else -> return false
         }
-
-        return super.onOptionsItemSelected(item)
-
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
 }

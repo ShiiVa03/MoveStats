@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,174 +9,147 @@
     android:orientation="vertical"
     tools:context=".StartupActivity">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="346dp"
-        android:layout_height="507dp"
-        app:cardBackgroundColor="#ffb703"
-        app:cardCornerRadius="25dp">
-
-        <LinearLayout
-            android:layout_width="329dp"
-            android:layout_height="485dp"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:paddingTop="10dp"
-                android:paddingBottom="5dp"
-                android:text="Register"
-                android:textColor="#023047"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:typeface="sans" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutName"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Name"
-                android:padding="10dp"
-                app:hintTextColor="#000000">
-
-                <EditText
-                    android:id="@+id/editTextName"
-                    android:layout_width="308dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:backgroundTint="#FBFBFB"
-                    android:hint="Name"
-                    android:shadowColor="#FFFFFF"
-                    android:textColor="#000000"
-                    android:textColorHighlight="@color/black"
-                    android:textColorHint="#000000"
-                    android:textColorLink="#000000" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/filledTextField"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:padding="10dp"
-                app:hintTextColor="#000000">
-
-                <EditText
-                    android:id="@+id/editTextUsername"
-                    android:layout_width="308dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:backgroundTint="#FBFBFB"
-                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-@."
-                    android:hint="Email"
-                    android:inputType="textFilter|textVisiblePassword|textNoSuggestions"
-                    android:shadowColor="#FFFFFF"
-                    android:textColor="#000000"
-                    android:textColorHighlight="@color/black"
-                    android:textColorHint="#000000"
-                    android:textColorLink="#000000" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/aa"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:padding="10dp">
-
-                <EditText
-                    android:id="@+id/editTextTextPassword"
-                    android:layout_width="308dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:backgroundTint="#FBFBFB"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:shadowColor="#FFFFFF"
-                    android:textColor="#000000"
-                    android:textColorHighlight="#000000"
-                    android:textColorHint="#000000"
-                    android:textColorLink="#000000" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pesolayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Peso (Kg)"
-                android:padding="10dp">
-
-                <EditText
-                    android:id="@+id/editTextPeso"
-                    android:layout_width="308dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:backgroundTint="#FBFBFB"
-                    android:ems="10"
-                    android:hint="Peso (Kg)"
-                    android:inputType="number"
-                    android:shadowColor="#FFFFFF"
-                    android:textColor="#000000"
-                    android:textColorHighlight="#000000"
-                    android:textColorHint="#000000"
-                    android:textColorLink="#000000" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/alturalayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Altura (cm)"
-                android:padding="10dp">
-
-                <EditText
-                    android:id="@+id/editTextAltura"
-                    android:layout_width="308dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:backgroundTint="#FBFBFB"
-                    android:ems="10"
-                    android:hint="Altura (cm)"
-                    android:inputType="number"
-                    android:shadowColor="#FFFFFF"
-                    android:textColor="#000000"
-                    android:textColorHighlight="#000000"
-                    android:textColorHint="#000000"
-                    android:textColorLink="#000000" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
-
-
-        </LinearLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonRegister"
+        android:layout_width="308dp"
+        android:layout_height="53dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/border_background"
+        android:backgroundTint="#000000"
+        android:text="@string/next"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#8ecae6"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="334dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/border_background"
+        android:backgroundTint="#a5aab0"
+        android:padding="10dp"
+        android:shadowColor="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="@color/black"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/border_background"
-        android:backgroundTint="#219ebc"
-        android:text="@string/next"
-        android:textColor="#023047"
-        android:textColorHint="#8ecae6" />
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="10dp"
+        android:text="Name"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-</LinearLayout>
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="334dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/border_background"
+        android:backgroundTint="#a5aab0"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-@."
+        android:inputType="textFilter|textVisiblePassword|textNoSuggestions"
+        android:padding="10dp"
+        android:shadowColor="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="@color/black"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="334dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/border_background"
+        android:backgroundTint="#a5aab0"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:shadowColor="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="391dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:text="Register"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="10dp"
+        android:text="Email"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="10dp"
+        android:text="Password"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

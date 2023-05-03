@@ -30,8 +30,7 @@ class RegisterActivity : AppCompatActivity() {
         val fieldName = findViewById<EditText>(R.id.editTextName)
         val fieldEmail = findViewById<EditText>(R.id.editTextUsername)
         val fieldPassword = findViewById<EditText>(R.id.editTextTextPassword)
-        val fieldPeso = findViewById<EditText>(R.id.editTextPeso)
-        val fieldAltura = findViewById<EditText>(R.id.editTextAltura)
+
 
         val buttonRegister = findViewById<Button>(R.id.buttonRegister)
 
@@ -60,44 +59,12 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val pesoT = fieldPeso.text.toString()
-            if (TextUtils.isEmpty(pesoT)) {
-                fieldPeso.error = "Required."
-                return@setOnClickListener
-            }
-            val peso = pesoT.toFloat()
+            val intent = Intent(this, RegisterHW::class.java)
+            intent.putExtra("name", name)
+            intent.putExtra("email", email)
+            intent.putExtra("pass", password)
+            startActivity(intent)
 
-            val alturaT = fieldAltura.text.toString()
-            if (TextUtils.isEmpty(alturaT)) {
-                fieldAltura.error = "Required."
-                return@setOnClickListener
-            }
-            val altura = alturaT.toInt()
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "createUserWithEmail:success")
-                        val intent = Intent(this, MainActivity::class.java)
-                        if(auth.currentUser != null) {
-                            val user = User(name, email, altura, peso)
-                            databaseRefined.child("users").child(auth.currentUser!!.uid)
-                                .setValue(user)
-                        }
-                        startActivity(intent)
-
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            baseContext,
-                            "Authentication failed.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
-                }
         }
-
     }
 }

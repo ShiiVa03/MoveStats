@@ -1,8 +1,7 @@
 package com.example.myapplication
 
-import CustomAdapter
+
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -25,17 +24,14 @@ class LeaderboardActivityIndv : AppCompatActivity() {
         supportActionBar?.hide()
 
         databaseRefined = Firebase.database("https://data-575fe-default-rtdb.europe-west1.firebasedatabase.app/").reference
-
-        val extras = intent.extras
-        val textView = findViewById<TextView>(R.id.textviewleaderboard2)
-        textView.text = extras!!.getString("Activity") + " Leaderboard"
-        textView.setTextColor(extras.getInt("Colour"))
-
-        fetchUsers(extras.getString("Activity")!!)
+        val act = intent.getStringExtra("Activity")!!
+        val text : TextView = findViewById(R.id.textviewleaderboard2)
+        text.text = "$act Leaderboard"
+        fetchUsers(act)
     }
 
 
-    fun fetchUsers(act : String) {
+    private fun fetchUsers(act : String) {
         val users = databaseRefined.child("users")
         var path = ""
 
@@ -62,37 +58,36 @@ class LeaderboardActivityIndv : AppCompatActivity() {
         }
     }
 
-    private fun initData(list : ArrayList<User>, act : String): ArrayList<ItemsViewModel> {
-        val data = ArrayList<ItemsViewModel>()
+    private fun initData(list : ArrayList<User>, act : String): ArrayList<ItemViewModel> {
+        val data = ArrayList<ItemViewModel>()
         var time = 0
 
-        list.reverse()
-        list.forEachIndexed { i, user ->
-            when (act) {
-                "Walking" -> time = user.WalkingTime!!
-                "Running" -> time = user.RunningTime!!
-                "UpStairs" -> time = user.UpStairsTime!!
-                "DownStairs" -> time = user.DownStairsTime!!
-                "Idle" -> time = user.IdleTime!!
-            }
+        if(list.isNotEmpty()) {
+            list.reverse()
+            list.forEach { user ->
+                when (act) {
+                    "Walking" -> time = user.WalkingTime!!
+                    "Running" -> time = user.RunningTime!!
+                    "UpStairs" -> time = user.UpStairsTime!!
+                    "DownStairs" -> time = user.DownStairsTime!!
+                    "Idle" -> time = user.IdleTime!!
+                }
 
-            data.add(
-                ItemsViewModel(
-                    R.drawable.ic_launcher_foreground,
-                    0f,
-                    "Rank " + (i+1).toString() + ": " + user.name!! + " >>> " + time + " seg",
-                    Color.WHITE
+                data.add(
+                    ItemViewModel(
+                        user.name!!.toString(),
+                        time.toString()
+                    )
                 )
-            )
+            }
         }
 
         return data
     }
 
-    private fun setupCards(data: ArrayList<ItemsViewModel>) {
+    private fun setupCards(data: ArrayList<ItemViewModel>) {
         val recyclerview = findViewById<RecyclerView>(R.id.recyclerviewleaderboard2)
-        val adapterListener = CustomAdapter.OnClickListener {}
-        val adapter = CustomAdapter(data, adapterListener)
+        val adapter = CustomAdapterLeaderboard(data)
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter
         recyclerview.layoutManager = LinearLayoutManager(this)
