@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val s = "${now.dayOfWeek.name}, ${now.dayOfMonth} ${now.month}"
 
-        val textView = findViewById<TextView>(R.id.textView)
+        val textView = findViewById<TextView>(R.id.textViewDate)
         textView.text = s
 
     }

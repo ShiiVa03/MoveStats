@@ -17,7 +17,7 @@ import com.github.mikephil.charting.charts.PieChart
 
 class CustomAdapter(private val mList: List<ItemsViewModel>, private val onClickListener: OnClickListener) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
-    private lateinit var boarder_background : GradientDrawable
+
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
@@ -25,8 +25,6 @@ class CustomAdapter(private val mList: List<ItemsViewModel>, private val onClick
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_view_design, parent, false)
 
-        boarder_background =
-            ResourcesCompat.getDrawable(parent.context.resources, R.drawable.border_background, null) as GradientDrawable
 
         return ViewHolder(view)
     }
@@ -37,15 +35,12 @@ class CustomAdapter(private val mList: List<ItemsViewModel>, private val onClick
         val itemsViewModel = mList[position]
 
         // sets the image to the imageview from our itemHolder class
-        holder.imageView.setImageResource(itemsViewModel.image)
+
 
         // sets the text to the textview from our itemHolder class
         holder.textView.text = itemsViewModel.text
 
 
-
-        boarder_background.setColor(itemsViewModel.colour)
-        holder.frameView.background = boarder_background
         //holder.frameView.setBackgroundColor(itemsViewModel.colour)
 
         holder.itemView.setOnClickListener {
@@ -61,9 +56,7 @@ class CustomAdapter(private val mList: List<ItemsViewModel>, private val onClick
 
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        val frameView: FrameLayout = itemView.findViewById(R.id.frameView)
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val textView: TextView = itemView.findViewById(R.id.textView)
+        val textView: TextView = itemView.findViewById(R.id.textActivity)
     }
 
     class OnClickListener(val clickListener: (meme: ItemsViewModel) -> Unit) {
