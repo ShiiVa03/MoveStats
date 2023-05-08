@@ -33,13 +33,7 @@ import java.time.LocalDateTime
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val stats: Stats = Stats()
-    private val colours = listOf(
-        Color.RED,
-        Color.GREEN,
-        Color.BLUE,
-        Color.YELLOW,
-        Color.MAGENTA
-    )
+    private val colours = ArrayList<Int>()
 
 
     private lateinit var drawerLayout : DrawerLayout
@@ -53,6 +47,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.hide()
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+
+        val hsv = FloatArray(3)
+
+
+        // Start with blue color
+        hsv[0] = 210f // blue hue
+
+        hsv[1] = 1f // full saturation
+
+        hsv[2] = 1f // full value
+
+
+        val gradientStep = 1.0f / Stats.activities.size.toFloat()
+        for (i in 0 until Stats.activities.size) {
+            hsv[2] -= gradientStep // reduce value by gradientStep to darken the color
+            colours.add(Color.HSVToColor(hsv))
+        }
 
 
         stats.load(applicationContext)
@@ -140,24 +152,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun createPieChart(data: ArrayList<ItemsViewModel>) {
         val pieChart = findViewById<PieChart>(R.id.pieChart)
 
+
         val pieEntries = ArrayList<PieEntry>()
         val usedColours = ArrayList<Int>()
+        var colourUses = 0
         for(i in 0 until Stats.activities.size) {
             if (data[i].time > 0) {
                 pieEntries.add(PieEntry(data[i].time, data[i].text))
-                usedColours.add(colours[i])
+                usedColours.add(colours[colourUses])
+                colourUses += 1
             }
         }
 
         val dataSet = PieDataSet(pieEntries, "")
+        dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE;
+        dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE;
         dataSet.colors = usedColours
         dataSet.valueTextSize = 14f
+        dataSet.valueTextColor = Color.WHITE
         //dataSet.valueFormatter = PercentFormatter(pieChart)
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 val hours = (value / 60).toInt()
                 val minutes = (value % 60).toInt()
-                return "${hours}h ${minutes}m"
+                if (hours > 0)
+                    return "${hours}h ${minutes}m"
+                else
+                    return "${minutes}m"
             }
         }
 

@@ -1,5 +1,9 @@
 package com.example.myapplication
 
+import android.annotation.TargetApi
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -8,7 +12,10 @@ import android.hardware.SensorManager
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.work.ForegroundInfo
+import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.firebase.auth.FirebaseAuth
@@ -192,6 +199,8 @@ class Stats {
             // Perform your long-running task here
             // This method runs on a background thread
 
+            setForegroundAsync(createForegroundInfo())
+
             load()
 
             val client = OkHttpClient.Builder().build()
@@ -239,6 +248,49 @@ class Stats {
         }
 
         override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        }
+
+
+        private fun createForegroundInfo(): ForegroundInfo {
+            // Use a different id for each Notification.
+            val notificationId = 1
+            return ForegroundInfo(notificationId, createNotification())
+        }
+
+        /**
+         * Create the notification and required channel (O+) for running work
+         * in a foreground service.
+         */
+        private fun createNotification(): Notification {
+            val channelId = "1"
+            val title = "MoveStats"
+            //val channelId = applicationContext.getString(R.string.notification_channel_id)
+            //val title = applicationContext.getString(R.string.notification_title)
+            // This PendingIntent can be used to cancel the Worker.
+            val intent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id)
+
+            val builder = NotificationCompat.Builder(applicationContext, channelId)
+                .setContentTitle(title)
+                .setTicker(title)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setOngoing(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel(channelId, "MoveStats").also {
+                    builder.setChannelId(channelId)
+                }
+            }
+            return builder.build()
+        }
+
+        /**
+         * Create the required notification channel for O+ devices.
+         */
+        @TargetApi(Build.VERSION_CODES.O)
+        private fun createNotificationChannel(channelId: String, name: String) {
+            val channel = NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_LOW)
+
+            val notificationManager: NotificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
