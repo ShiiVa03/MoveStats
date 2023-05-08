@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.navigation.NavigationView
+import java.lang.Float.max
 import java.time.LocalDateTime
 
 
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val gradientStep = 1.0f / Stats.activities.size.toFloat()
         for (i in 0 until Stats.activities.size) {
-            hsv[2] -= gradientStep // reduce value by gradientStep to darken the color
+            hsv[2] = max(0f, gradientStep - hsv[2]) // reduce value by gradientStep to darken the color
             colours.add(Color.HSVToColor(hsv))
         }
 
