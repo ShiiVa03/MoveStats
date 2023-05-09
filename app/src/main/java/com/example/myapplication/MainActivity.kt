@@ -1,11 +1,13 @@
 package com.example.myapplication
 
 import CustomAdapter
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageButton
@@ -26,8 +28,16 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.lang.Float.max
 import java.time.LocalDateTime
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.math.roundToInt
 
 
 @Suppress("NAME_SHADOWING")
@@ -40,12 +50,50 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawerLayout : DrawerLayout
     private lateinit var navView: NavigationView
 
+    private lateinit var auth : FirebaseAuth
+    private lateinit var databaseRefined : DatabaseReference
+    companion object{
+        var metList = listOf(2.0f, 10.0f, 8.3f, 3.5f, 1.3f)
+    }
 
+
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+        auth = Firebase.auth
+
+        databaseRefined =
+            Firebase.database("https://data-575fe-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask(){
+            override fun run() {
+                if (auth.currentUser != null) {
+                    databaseRefined.child("users").child(auth.currentUser!!.uid).get().addOnSuccessListener {
+                        val user = it.getValue(User::class.java)
+                        val timesList = ArrayList<Int>()
+                        timesList.add(user!!.WalkingTime!!)
+                        timesList.add(user.RunningTime!!)
+                        timesList.add(user.UpStairsTime!!)
+                        timesList.add(user.DownStairsTime!!)
+                        timesList.add(user.IdleTime!!)
+
+                        val calls = finalCallories(timesList, user.weight!!).roundToInt()
+                        val text = findViewById<TextView>(R.id.calls)
+                        runOnUiThread { text.text = "Spent $calls calories today" }
+
+
+                    }.addOnFailureListener{
+                        Log.e("firebase", "error getting data", it)
+                    }
+                }
+
+            }
+        },0,300000)
+
+
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
@@ -206,6 +254,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pieChart.invalidate()
 
 
+    }
+
+    private fun calloriesPerMinute(met : Float, weight : Float, minutes : Float): Float {
+        return 0.0175f * met * weight * minutes
+    }
+
+    private fun finalCallories(times : List<Int>, weight : Float): Float{
+        var calories = 0.0f
+        for ((ind,time) in times.withIndex()){
+            calories += calloriesPerMinute(metList[ind], weight, time/60.0f)
+
+        }
+        return calories
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
