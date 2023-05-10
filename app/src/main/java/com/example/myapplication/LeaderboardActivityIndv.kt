@@ -65,20 +65,22 @@ class LeaderboardActivityIndv : AppCompatActivity() {
         if(list.isNotEmpty()) {
             list.reverse()
             list.forEach { user ->
-                when (act) {
-                    "Walking" -> time = user.WalkingTime!!
-                    "Running" -> time = user.RunningTime!!
-                    "UpStairs" -> time = user.UpStairsTime!!
-                    "DownStairs" -> time = user.DownStairsTime!!
-                    "Idle" -> time = user.IdleTime!!
-                }
+                if (user.WalkingTime != null) {
+                    when (act) {
+                        "Walking" -> time = user.WalkingTime
+                        "Running" -> time = user.RunningTime!!
+                        "UpStairs" -> time = user.UpStairsTime!!
+                        "DownStairs" -> time = user.DownStairsTime!!
+                        "Idle" -> time = user.IdleTime!!
+                    }
 
-                data.add(
-                    ItemViewModel(
-                        user.name!!.toString(),
-                        time.toString()
+                    data.add(
+                        ItemViewModel(
+                            user.name!!.toString(),
+                            time.toString()
+                        )
                     )
-                )
+                }
             }
         }
 
