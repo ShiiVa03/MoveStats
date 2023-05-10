@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val gradientStep = 1.0f / Stats.activities.size.toFloat()
         for (i in 0 until Stats.activities.size) {
-            hsv[2] = max(0f, gradientStep - hsv[2]) // reduce value by gradientStep to darken the color
+            hsv[2] = max(0f, hsv[2] - gradientStep) // reduce value by gradientStep to darken the color
             colours.add(Color.HSVToColor(hsv))
         }
 
@@ -221,8 +221,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         val dataSet = PieDataSet(pieEntries, "")
-        dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE;
-        dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE;
+        dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+        dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
         dataSet.colors = usedColours
         dataSet.valueTextSize = 14f
         dataSet.valueTextColor = Color.WHITE
