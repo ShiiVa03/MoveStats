@@ -225,7 +225,7 @@ class Stats {
                 val samples : ArrayList<List<CollectedStats>> = ArrayList()
 
                 // Each iteration (sample) takes 20sec so a total of 300sec (5min) to complete
-                for (i in 0 until 1) {
+                for (i in 0 until 15) {
                     Thread.sleep((TIME_PER_SAMPLE * 1_000).toLong())
                     samples.add(collect())
                     Log.d("TAG", "Iteration $i")
