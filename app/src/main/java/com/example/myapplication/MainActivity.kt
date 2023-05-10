@@ -115,10 +115,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         hsv[2] = 1f // full value
 
+        val minHsv = 0.2f
 
-        val gradientStep = 1.0f / Stats.activities.size.toFloat()
+
+        val gradientStep = (1.0f - minHsv) / Stats.activities.size.toFloat()
         for (i in 0 until Stats.activities.size) {
-            hsv[2] = max(0f, hsv[2] - gradientStep) // reduce value by gradientStep to darken the color
+            hsv[2] = max(minHsv, hsv[2] - gradientStep) // reduce value by gradientStep to darken the color
             colours.add(Color.HSVToColor(hsv))
         }
 
