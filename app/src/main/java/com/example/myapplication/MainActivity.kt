@@ -74,15 +74,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     databaseRefined.child("users").child(auth.currentUser!!.uid).get().addOnSuccessListener {
                         val user = it.getValue(User::class.java)
                         val timesList = ArrayList<Int>()
-                        timesList.add(user!!.WalkingTime!!)
-                        timesList.add(user.RunningTime!!)
-                        timesList.add(user.UpStairsTime!!)
-                        timesList.add(user.DownStairsTime!!)
-                        timesList.add(user.IdleTime!!)
+                        if(user!!.WalkingTime != null) {
+                            timesList.add(user.WalkingTime!!)
+                            timesList.add(user.RunningTime!!)
+                            timesList.add(user.UpStairsTime!!)
+                            timesList.add(user.DownStairsTime!!)
+                            timesList.add(user.IdleTime!!)
+                            Log.d("TOU", "TOUUUUU")
+                            val calls = finalCallories(timesList, user.weight!!).roundToInt()
+                            val text = findViewById<TextView>(R.id.calls)
+                            runOnUiThread { text.text = "Spent $calls calories today" }
+                        }else{
+                            val text = findViewById<TextView>(R.id.calls)
+                            runOnUiThread { text.text = "Spent 0 calories today" }
+                        }
 
-                        val calls = finalCallories(timesList, user.weight!!).roundToInt()
-                        val text = findViewById<TextView>(R.id.calls)
-                        runOnUiThread { text.text = "Spent $calls calories today" }
+
 
 
                     }.addOnFailureListener{
