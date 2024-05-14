@@ -26,7 +26,7 @@ MoveStats is designed with a modular architecture to promote code reusability, e
 
 **Modular Architecture Diagram**
 
-[Image of Architecture Diagram](images/architecure.jpg)  **Additional Technical Details:**
+[Image of Architecture Diagram](images/architecture.jpg)  **Additional Technical Details:**
 
 * **Platform:** Android
 * **Programming Language:** Kotlin
