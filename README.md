@@ -1,4 +1,3 @@
-I am unable to display images directly in a markdown file, but I can include a reference to the image you sent. Here's the updated README with the architecture diagram referenced:
 
 ## MoveStats: Android Fitness App with Modular Architecture
 
